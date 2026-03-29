@@ -3,6 +3,7 @@ import ChatInput from "./components/ChatInput";
 import UserPanel from "./components/UserPanel";
 import AIResponsePanel from "./components/AIResponsePanel";
 import { streamResponse, type ConversationState } from "./services/streamService";
+import { sendChatMessage } from "./services/backendApiService";
 import "./App.css";
 
 interface Message {
@@ -37,9 +38,10 @@ export default function App() {
     setUserMessages((prev) => [...prev, { text: message, ts: now() }]);
     setLoading(true);
     try {
-      const { reply, nextState } = await streamResponse(message, convState);
-      setAiResponses((prev) => [...prev, { text: reply, ts: now() }]);
-      setConvState(nextState);
+    //   const { reply, nextState } = await streamResponse(message, convState);
+      const { response } = await sendChatMessage(message);
+      setAiResponses((prev) => [...prev, { text: response, ts: now() }]);
+    //   setConvState(nextState);
     } finally {
       setLoading(false);
     }

@@ -1,9 +1,12 @@
-interface Message {
-  text: string;
-  ts: string;
-}
+// =============================================================
+// UserPanel.tsx
+// Renders the user's chat message bubbles, aligned to the right.
+// =============================================================
+
+import type { Message } from "../types";
 
 interface UserPanelProps {
+  /** Array of user messages to display */
   messages: Message[];
 }
 

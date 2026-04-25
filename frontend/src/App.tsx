@@ -116,11 +116,26 @@ export default function App() {
   return (
     <div className="page">
       <div className="chat-box">
+        <nav className="nav" aria-label="Main navigation">
+          <span className="nav__logo">TechAlong Labs</span>
+          <a href="#about" className="nav__link">
+            About
+          </a>
+          <a href="#projects" className="nav__link">
+            Projects
+          </a>
+          <a href="#donate" className="nav__link">
+            Donate
+          </a>
+          <a href="#contact" className="nav__link">
+            Contact
+          </a>
+        </nav>
         {/* ── Top navigation bar ── */}
         <nav className="navbar">
           <div className="navbar-inner">
             <div className="navbar-left">
-              <span className="nav-brand">TechAlong Labs</span>
+              {/* <span className="nav-brand">TechAlong Labs</span> */}
               {/* FAQ links SFU (Not defined yet) */}
               <a
                 href="https://www.sfu.ca/"
@@ -159,10 +174,12 @@ export default function App() {
                     <span className="avatar-mouth">ᴗ</span>
                   </div>
                   <div className="welcome-text">
-                    <h1 className="welcome-title">Hi, I'm One Tap Away Chatbot!</h1>
+                    <h1 className="welcome-title">
+                      Hi, I'm One Tap Away Chatbot!
+                    </h1>
                     <p className="welcome-subtitle">
-                      I am here to provide you with community resources in British
-                      Columbia, Canada.
+                      I am here to provide you with community resources in
+                      British Columbia, Canada.
                     </p>
                   </div>
                 </div>

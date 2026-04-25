@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;600&display=swap');
+
+:root {
+  --maroon-70: rgba(116, 87, 116, 0.7);
+  --maroon-40-alt: #4a2d4a;
+}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -502,3 +507,40 @@ body {
 }
 
 .footer-link { color: #6b3fa0; text-decoration: underline; }
+
+
+/* ─── Navigation ─── */
+.nav {
+  position: fixed;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 20px 25px;
+  border: 1px solid var(--maroon-70);
+  border-radius: 25px;
+  background: rgba(244, 240, 244, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 18px;
+  color: var(--maroon-40-alt);
+  white-space: nowrap;
+}
+
+.nav__logo {
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 600;
+}
+
+.nav__link {
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 400;
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.nav__link:hover { opacity: 0.7; }
+

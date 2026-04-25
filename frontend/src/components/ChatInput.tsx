@@ -5,6 +5,7 @@
 // =============================================================
 
 import { useState, useRef } from "react";
+import SendButton from "./SendButton";
 
 /** Quick-select suggestion prompts shown to the user before their first message */
 const SUGGESTION_CHIPS = [
@@ -77,37 +78,35 @@ export default function ChatInput({
 
   return (
     <div className="input-bar">
-      {/* ── Suggestion chips row — only shown before the first message ── */}
-      {isFirstMessage && (
-        <div className="chips-row">
-          <button
-            className="chips-chevron"
-            onClick={() => scrollChips("left")}
-            aria-label="Scroll chips left"
-          >
-            &#8249;
-          </button>
-          <div className="chips-container" ref={chipsRef}>
-            {SUGGESTION_CHIPS.map((chip) => (
-              <button
-                key={chip}
-                className="chip"
-                onClick={() => handleSend(chip)}
-                disabled={disabled}
-              >
-                {chip}
-              </button>
-            ))}
-          </div>
-          <button
-            className="chips-chevron"
-            onClick={() => scrollChips("right")}
-            aria-label="Scroll chips right"
-          >
-            &#8250;
-          </button>
+      {/* ── Suggestion chips row — always visible ── */}
+      <div className="chips-row">
+        <button
+          className="chips-chevron"
+          onClick={() => scrollChips("left")}
+          aria-label="Scroll chips left"
+        >
+          &#8249;
+        </button>
+        <div className="chips-container" ref={chipsRef}>
+          {SUGGESTION_CHIPS.map((chip) => (
+            <button
+              key={chip}
+              className="chip"
+              onClick={() => handleSend(chip)}
+              disabled={disabled}
+            >
+              {chip}
+            </button>
+          ))}
         </div>
-      )}
+        <button
+          className="chips-chevron"
+          onClick={() => scrollChips("right")}
+          aria-label="Scroll chips right"
+        >
+          &#8250;
+        </button>
+      </div>
 
       {/* ── Text input row ── */}
       <div className="input-row">
@@ -125,16 +124,10 @@ export default function ChatInput({
           onKeyDown={handleKey}
           disabled={disabled}
         />
-        <button
-          className="send-btn"
+        <SendButton
           onClick={() => handleSend()}
           disabled={!message.trim() || disabled}
-          aria-label="Send message"
-        >
-          <svg viewBox="0 0 24 24" fill="white" width="18" height="18">
-            <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
-          </svg>
-        </button>
+        />
       </div>
 
       {/* ── Privacy policy notice ── */}

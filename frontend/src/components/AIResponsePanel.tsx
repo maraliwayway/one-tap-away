@@ -23,7 +23,7 @@ export default function AIResponsePanel({
       {/* Render each AI response as a Markdown-formatted bubble */}
       {responses.map((res, i) => (
         <div key={i} className="msg-row ai">
-          <div className="msg-avatar">🤝</div>
+          {/* <div className="msg-avatar">ᴗ</div> */}
           {/* ReactMarkdown converts **bold**, links, etc. from the backend response into HTML */}
           <div className="bubble ai markdown-body">
             <ReactMarkdown>{res.text}</ReactMarkdown>
@@ -34,7 +34,7 @@ export default function AIResponsePanel({
       {/* Animated typing indicator — shown while waiting for the AI response */}
       {loading && (
         <div className="typing-row">
-          <div className="msg-avatar">🤝</div>
+          {/* <div className="msg-avatar">ᴗ</div> */}
           <div className="typing-bubble">
             <div className="dot" />
             <div className="dot" />

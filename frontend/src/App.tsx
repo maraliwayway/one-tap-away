@@ -13,10 +13,21 @@ import { sendChatMessage } from "./services/backendApiService";
 import type { Message } from "./types";
 import "./App.css";
 
-/**
- * Returns the current time as a formatted string (e.g. "02:35 PM").
- * Used to timestamp each message when it is created.
- */
+const GREETING_MESSAGE = `I am here to support you today!
+
+Before we start, I would like to let you know that my information is for **organizations in BC, Canada,** primarily in **Metro Vancouver**.
+
+The information has been carefully selected in partnership with Vancouver & Lower Mainland Multicultural Family Support Services Society (VLMFSS).
+
+Each time you use the chatbot, your internet browser may store conversation history.
+
+Please also note your internet browser may store conversation history.
+If you want to remove all traces of the websites you have browsed, please clear your browser's cache.
+- [Microsoft Edge](https://support.microsoft.com/en-us/microsoft-edge/view-and-delete-browser-history-in-microsoft-edge-00cf7943-a9e1-975a-a33d-ac10ce454ca4)
+- [Google Chrome](https://support.google.com/accounts/answer/32050?co=GENIE.Platform%3DDesktop&hl=en&oco=1)
+- [Firefox](https://support.mozilla.org/en-US/kb/how-clear-firefox-cache)
+- [Safari](https://www.macrumors.com/how-to/clear-safari-cache/)`;
+
 function now(): string {
   return new Date().toLocaleTimeString([], {
     hour: "2-digit",
@@ -25,12 +36,12 @@ function now(): string {
 }
 
 export default function App() {
-  // List of messages sent by the user
   const [userMessages, setUserMessages] = useState<Message[]>([]);
-  // List of AI responses received from the backend
   const [aiResponses, setAiResponses] = useState<Message[]>([]);
-  // True while waiting for the backend to respond (shows loading indicator)
   const [loading, setLoading] = useState(false);
+  const [chatStarted, setChatStarted] = useState(false);
+  // Greeting message shown once after "Start Chat" is clicked
+  const [greetingMessage, setGreetingMessage] = useState<Message | null>(null);
 
   // Ref attached to an invisible div at the bottom of the message list,
   // used to auto-scroll to the latest message
@@ -63,13 +74,20 @@ export default function App() {
     }
   };
 
-  /**
-   * Called when the user clicks "Reset Chat".
-   * Clears all messages and returns to the Welcome screen.
-   */
   const handleReset = () => {
     setUserMessages([]);
     setAiResponses([]);
+    setGreetingMessage(null);
+    setChatStarted(false);
+  };
+
+  // Show typing indicator then inject the greeting message
+  const handleStartChat = async () => {
+    setChatStarted(true);
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setGreetingMessage({ text: GREETING_MESSAGE, ts: now() });
+    setLoading(false);
   };
 
   /**
@@ -131,23 +149,59 @@ export default function App() {
         {/* ── Main chat area ── */}
         <main className="main-content">
           <div className="chat-inner">
-            {/* Welcome screen — only shown before the first message is sent */}
-            {isFirstMessage && (
+            {/* Welcome screen — only shown before the user clicks "Start Chat" */}
+            {!chatStarted && (
               <div className="welcome">
-                <div className="welcome-avatar">
-                  <span>ᴗ</span>
+                <div className="welcome-logo">
+                  <div className="welcome-avatar">
+                    <span className="avatar-eye avatar-eye-left"></span>
+                    <span className="avatar-eye avatar-eye-right"></span>
+                    <span className="avatar-mouth">ᴗ</span>
+                  </div>
+                  <div className="welcome-text">
+                    <h1 className="welcome-title">Hi, I'm One Tap Away Chatbot!</h1>
+                    <p className="welcome-subtitle">
+                      I am here to provide you with community resources in British
+                      Columbia, Canada.
+                    </p>
+                  </div>
                 </div>
-                <h1 className="welcome-title">Hi, I'm One Tap Away Chatbot!</h1>
-                <p className="welcome-subtitle">
-                  I am here to provide you with community resources in British
-                  Columbia, Canada.
-                </p>
+                <div className="welcome-chat-starter">
+                  <button
+                    className="welcome-start-btn"
+                    onClick={handleStartChat}
+                  >
+                    Start Chat
+                  </button>
+                  <p className="welcome-footer-text">
+                    {`Created by `}
+                    <a
+                      href="https://www.sfu.ca/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      TechAlong Labs
+                    </a>
+                    {`. By using this chat, you agree to our `}
+                    <a href="#" className="footer-link">
+                      Privacy Policy
+                    </a>
+                    {`. `}
+                  </p>
+                </div>
               </div>
             )}
 
-            {/* Message list — shown once at least one message exists */}
-            {!isFirstMessage && (
+            {/* Message list — shown once chat has started */}
+            {chatStarted && (
               <div className="messages">
+                {/* Greeting message injected after Start Chat */}
+                {greetingMessage && (
+                  <AIResponsePanel
+                    responses={[greetingMessage]}
+                    loading={false}
+                  />
+                )}
                 {interleaved.map((item, i) =>
                   item.type === "user" ? (
                     <UserPanel key={i} messages={[item.data]} />
@@ -159,25 +213,26 @@ export default function App() {
                     />
                   ),
                 )}
-                {/* Show typing indicator while waiting for the AI response */}
+                {/* Typing indicator for greeting load and subsequent AI responses */}
                 {loading && <AIResponsePanel responses={[]} loading={true} />}
-                {/* Invisible anchor used by the auto-scroll effect */}
                 <div ref={bottomRef} />
               </div>
             )}
           </div>
         </main>
 
-        {/* ── Bottom input bar ── */}
-        <div className="input-wrapper">
-          <div className="input-wrapper-inner">
-            <ChatInput
-              onSend={handleSend}
-              disabled={loading}
-              isFirstMessage={isFirstMessage}
-            />
+        {/* ── Bottom input bar — hidden on welcome screen ── */}
+        {chatStarted && (
+          <div className="input-wrapper">
+            <div className="input-wrapper-inner">
+              <ChatInput
+                onSend={handleSend}
+                disabled={loading}
+                isFirstMessage={isFirstMessage}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

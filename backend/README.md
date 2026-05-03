@@ -3,25 +3,40 @@ This is a Flask backend that provides an AI-powered chat endpoint for city and i
 
 ## Setup Instructions
 
-### 1. Install pipenv
-If you don't have pipenv installed, run:
+### 1. Install uv
+If you don't have `uv` installed, run:
 
 ```bash
-pip install pipenv
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### 2. Install dependencies
+### 2. Install Python 3.11 and dependencies
 Navigate to this backend directory and run:
 
 ```bash
-pipenv install
+uv python install 3.11
+uv sync
 ```
 
 ### 3. Run the server
 Start the backend server with:
 
 ```bash
-pipenv run python app.py
+uv run python app.py
+```
+
+## Developer Cheatsheet
+
+Run lint checks:
+
+```bash
+uv run ruff check .
+```
+
+Format code:
+
+```bash
+uv run ruff format .
 ```
 
 ## Test Backend 

@@ -1,5 +1,3 @@
-
-
 import os
 import json
 from flask import Flask, request, jsonify
@@ -15,17 +13,18 @@ from src.load_new_data import load_new_data
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
-# configures Gemini library 
+# configures Gemini library
 genai.configure(api_key=api_key)
-model = genai.GenerativeModel('gemini-flash-latest')
+model = genai.GenerativeModel("gemini-flash-latest")
 
 
-# creates the Flask app and enables CORS 
+# creates the Flask app and enables CORS
 app = Flask(__name__)
 CORS(app)
 
 # Register the semantic search blueprint
 app.register_blueprint(chat_semantic_search_bp)
+
 
 def extract_vars(user_text):
     """
@@ -35,35 +34,38 @@ def extract_vars(user_text):
     prompt = (
         f"Analyze this message: '{user_text}'. "
         "Identify the 'city' (must be in British Columbia) and the 'intent' (all other words). "
-        "Return ONLY a JSON object: {\"city\": \"string or null\", \"intent\": \"string\"}"
+        'Return ONLY a JSON object: {"city": "string or null", "intent": "string"}'
     )
-    
+
     response = model.generate_content(prompt)
 
     # JSON format
-    json_str = response.text.strip().replace('```json', '').replace('```', '')
+    json_str = response.text.strip().replace("```json", "").replace("```", "")
     return json.loads(json_str)
 
+
 # http endpoint
-@app.route('/chat', methods=['POST'])
+@app.route("/chat", methods=["POST"])
 def chat():
     print("hello!")
 
     # get message sent by the React frontend
     data = request.json
     user_message = data.get("message", "")
-    
+
     # processes the variables {city} and {intent}
     result = extract_vars(user_message)
-    
+
     # returns the variables back to the frontend as a JSON response
     print(jsonify(result))
     return jsonify(result)
 
+
 # for debugging
-@app.route('/')
+@app.route("/")
 def index():
     return "backend is running"
+
 
 def main():
     load_new_data()

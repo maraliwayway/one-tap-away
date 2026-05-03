@@ -1,4 +1,0 @@
-flask # turns python script into a web server
-flask-cors # allows react frontend to talk to backend
-python-dotenv # loads api keys from .env file to python files
-google-generativeai # connects to google gemini api

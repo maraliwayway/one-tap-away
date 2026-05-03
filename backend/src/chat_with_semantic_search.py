@@ -8,31 +8,35 @@ import google.generativeai as genai
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=api_key)
-model = genai.GenerativeModel('gemini-flash-latest')
+model = genai.GenerativeModel("gemini-flash-latest")
 
 # Blueprint for the new endpoint
-chat_semantic_search_bp = Blueprint('chat_with_semantic_search', __name__)
+chat_semantic_search_bp = Blueprint("chat_with_semantic_search", __name__)
 
 
 # Base directory for relative paths
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-SYSTEM_INSTRUCTIONS_PATH = os.path.join(BASE_DIR, 'artifacts', 'system_instructions.md')
-SYSTEM_DATA_PATH = os.path.join(BASE_DIR, 'artifacts', 'spreadsheet_data.json')
+SYSTEM_INSTRUCTIONS_PATH = os.path.join(BASE_DIR, "artifacts", "system_instructions.md")
+SYSTEM_DATA_PATH = os.path.join(BASE_DIR, "artifacts", "spreadsheet_data.json")
+
 
 def _load_file(path):
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, "r", encoding="utf-8") as f:
         return f.read()
 
+
 def _load_json(path):
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 def _build_prompt(system_instructions, system_data, user_message):
     return f"""
 SYSTEM INSTRUCTIONS:\n{system_instructions}\n\nSYSTEM DATA:\n{system_data}\n\nUSER MESSAGE:\n{user_message}\n\nRespond as instructed above.
 """
 
-@chat_semantic_search_bp.route('/chat_with_semantic_search', methods=['POST'])
+
+@chat_semantic_search_bp.route("/chat_with_semantic_search", methods=["POST"])
 def chat_with_semantic_search():
     data = request.json
     user_message = data.get("message", "")

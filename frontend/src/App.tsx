@@ -168,20 +168,7 @@ export default function App() {
             {!chatStarted && (
               <div className="welcome">
                 <div className="welcome-logo">
-                  <div className="welcome-avatar">
-                    <span className="avatar-eye avatar-eye-left"></span>
-                    <span className="avatar-eye avatar-eye-right"></span>
-                    <span className="avatar-mouth">ᴗ</span>
-                  </div>
-                  <div className="welcome-text">
-                    <h1 className="welcome-title">
-                      Hi, I'm One Tap Away Chatbot!
-                    </h1>
-                    <p className="welcome-subtitle">
-                      I am here to provide you with community resources in
-                      British Columbia, Canada.
-                    </p>
-                  </div>
+                  <img src="/logo-gif.gif" alt="One Tap Away logo" />
                 </div>
                 <div className="welcome-chat-starter">
                   <button

@@ -156,6 +156,13 @@ body {
   gap: 32px;
 }
 
+.welcome-logo img {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  display: block;
+}
+
 .welcome-avatar {
   width: 100px;
   height: 100px;
